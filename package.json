@@ -1,0 +1,12 @@
+{
+  "name": "enzotool",
+  "version": "1.0.0",
+  "description": "EnzoTool — Discord Nitro Generator & Checker. Zero dependencies.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "Enzo",
+  "license": "MIT"
+}
