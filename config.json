@@ -1,5 +1,18 @@
 {
-  "port": 3000,
-  "concurrencyLimit": 5,
-  "delayLimit": 5000
+  "botName": "VELORA HUB",
+  "welcomeChannelId": "1519705672940388403",
+  "welcomeImage": "https://cdn.discordapp.com/attachments/1520114395626078439/1520129658509856820/Picsart_26-06-26_21-11-54-638.png?ex=6a401291&is=6a3ec111&hm=6dfbb6af03975a44a51f6882708cb934e60982e26db5373aa1f5bc492f3fc978&",
+  "ticketCategoryId": "1519710725163978853",
+  "ticketPanelChannelId": "1519710725163978853",
+  "ticketLogChannelId": "1520115836654981200",
+  "ticketStaffRoleId": "1520110236051046490",
+  "ticketAllowedRoleIds": ["1520109466488410265"],
+  "suggestionsChannelId": "1519713973937766480",
+  "taxChannelId": "1519712374892793996",
+  "reviewChannelId": "1519708431857094757",
+  "summonRoles": {
+    "programmer": "1520111193929547937",
+    "artist": "1520111282597134528",
+    "serverDesigner": "1520111370756948130"
+  }
 }
