@@ -1,12 +1,9 @@
 {
-  "name": "enzotool",
+  "name": "velora-hub-bot",
   "version": "1.0.0",
-  "description": "EnzoTool — Discord Nitro Generator & Checker. Zero dependencies.",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "author": "Enzo",
+  "description": "VELORA HUB Discord server management and ticket bot.",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "author": "VELORA HUB",
   "license": "MIT"
 }
