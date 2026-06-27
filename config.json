@@ -1,5 +1,34 @@
 {
-  "port": 3000,
-  "concurrencyLimit": 5,
-  "delayLimit": 5000
+  "serverName": "VELORA HUB",
+  "botName": "VELORA HUB",
+  "accentColor": 7875566,
+  "welcomeChannelId": "1519705672940388403",
+  "serverBanner": "https://your-server-banner.png",
+  "welcomeImage": "https://cdn.discordapp.com/attachments/1520114395626078439/1520129658509856820/Picsart_26-06-26_21-11-54-638.png?ex=6a401291&is=6a3ec111&hm=6dfbb6af03975a44a51f6882708cb934e60982e26db5373aa1f5bc492f3fc978&",
+  "supportTicketCategoryId": "1520477634822144060",
+  "purchaseTicketCategoryId": "1520477634822144060",
+  "ticketCategoryId": "1520477634822144060",
+  "ticketLogChannelId": "1520115836654981200",
+  "supportStaffRoleId": "1520110236051046490",
+  "purchaseStaffRoleId": "1520110236051046490",
+  "ticketStaffRoleId": "1520110236051046490",
+  "ticketAllowedRoleIds": ["1520109466488410265"],
+  "suggestionsChannelId": "1519713973937766480",
+  "taxChannelId": "1519712374892793996",
+  "reviewChannelId": "1519708431857094757",
+  "generalLogChannelId": "1520115836654981200",
+  "modLogChannelId": "1520115836654981200",
+  "suggestionLogChannelId": "1520115836654981200",
+  "leaveLogChannelId": "1520115836654981200",
+  "antiSpamMaxMessages": 5,
+  "antiSpamWindowMs": 7000,
+  "antiMentionLimit": 5,
+  "antiRaidJoins": 6,
+  "antiRaidWindowMs": 10000,
+  "muteRoleId": "",
+  "summonRoles": {
+    "programmer": "1520111193929547937",
+    "artist": "1520111282597134528",
+    "serverDesigner": "1520111370756948130"
+  }
 }
