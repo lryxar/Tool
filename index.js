@@ -172,15 +172,7 @@ async function component(i) {
   if (parts[0] === 'ticket' && parts[1] === 'open') return openTicket(i, parts[2]);
   if (parts[0] === 'ticketctl' && parts[1] === 'claim') return claimTicket(i);
   if (parts[0] === 'ticketctl' && parts[1] === 'close') return closeTicket(i, 'تم الإغلاق من الزر');
-  if (parts[0] === 'rate') return rateTicket(i, parts[1], Number(parts[2]));
-  if (parts[0] === 'suggest') return reply(i, { embeds: [makeEmbed('تم تسجيل صوتك', `اختيارك: **${parts[1]}**`, COLORS.ok)] });
 }
-async function rateTicket(i, ticketId, stars) {
-  if (state.closedTickets[ticketId]) { state.closedTickets[ticketId].rating = { stars, by: i.member?.user?.id || i.user?.id, at: Date.now() }; save(); }
-  await logTicket('⭐ تقييم دعم جديد', `التذكرة: **${ticketId}**\nالتقييم: **${stars}/5**`, COLORS.gold);
-  return reply(i, { embeds: [makeEmbed('شكراً لتقييمك 💜', `تم تسجيل تقييمك: **${stars}/5**`, COLORS.gold)] });
-}
-
 async function ticketCommand(i, name) {
   if (!isTicketStaff(i.member) && name !== 'ticket-close') return reply(i, { embeds: [makeEmbed('صلاحية غير كافية', `هذه الأوامر مخصصة لمسؤولي التذاكر <@&${config.ticketStaffRoleId}>.`, COLORS.danger)] });
   if (name === 'ticket-claim') return claimTicket(i);
@@ -195,14 +187,6 @@ async function ticketCommand(i, name) {
     await api('PATCH', `/channels/${i.channel_id}`, { name: cleanName(opt(i, 'name')) });
     return reply(i, { embeds: [makeEmbed('✏️ تم تغيير الاسم', `الاسم الجديد: **${cleanName(opt(i, 'name'))}**`, COLORS.ok)] });
   }
-  if (name === 'ticket-assign') {
-    const staff = opt(i, 'staff');
-    state.ticketMeta[i.channel_id] ||= {};
-    state.ticketMeta[i.channel_id].assignedTo = staff; save();
-    await logTicket('👤 تعيين تذكرة', `الروم: <#${i.channel_id}>\nالموظف: <@${staff}>`, COLORS.info);
-    return reply(i, { embeds: [makeEmbed('👤 تم تعيين التذكرة', `الموظف المسؤول: <@${staff}>`, COLORS.ok)] }, false);
-  }
-  if (name === 'ticket-reopen') return reopenTicket(i, opt(i, 'ticket_id'));
 }
 async function openTicket(i, type) {
   if (!canUseTickets(i.member)) return reply(i, { embeds: [makeEmbed('غير مسموح', 'لا تملك رتبة مسموحة لفتح التذاكر.', COLORS.danger)] });
@@ -213,10 +197,8 @@ async function openTicket(i, type) {
   const name = cleanName(`${meta.prefix}-${String(number).padStart(4, '0')}-${i.member.user.username}`);
   const allowTicket = bit(PERMS.ViewChannel, PERMS.SendMessages, PERMS.ReadMessageHistory, PERMS.AttachFiles);
   const channel = await api('POST', `/guilds/${i.guild_id}/channels`, { name, type: 0, parent_id: config.ticketCategoryId, permission_overwrites: [{ id: i.guild_id, type: 0, deny: PERMS.ViewChannel.toString() }, { id: i.member.user.id, type: 1, allow: allowTicket }, { id: config.ticketStaffRoleId, type: 0, allow: allowTicket }] });
-  state.tickets[key] = channel.id;
-  state.ticketMeta[channel.id] = { key, ownerId: i.member.user.id, type, number, openedAt: Date.now(), assignedTo: null, channelName: name };
-  save();
-  await post(channel.id, { content: `<@${i.member.user.id}> <@&${config.ticketStaffRoleId}>`, embeds: [makeEmbed(type === 'purchase' ? '🛒 تذكرة شراء' : '🛠 تذكرة دعم', `${fancyLine()}\n${meta.intro}\n\n**المنشئ:** <@${i.member.user.id}>\n**وقت الفتح:** <t:${Math.floor(Date.now() / 1000)}:F>\n**رقم التذكرة:** #${number}\n**نوعها:** ${meta.label}\n**الحالة:** مفتوحة`, meta.color)], components: [{ type: 1, components: [{ type: 2, style: 2, custom_id: 'ticketctl:claim', label: 'استلام التذكرة', emoji: { name: '🙋' } }, { type: 2, style: 4, custom_id: 'ticketctl:close', label: 'إغلاق التذكرة', emoji: { name: '🔒' } }] }] });
+  state.tickets[key] = channel.id; save();
+  await post(channel.id, { content: `<@${i.member.user.id}> <@&${config.ticketStaffRoleId}>`, embeds: [makeEmbed(`${meta.emoji} ${meta.label} #${number}`, `${fancyLine()}\n${meta.intro}\n\n**صاحب التذكرة:** <@${i.member.user.id}>\n**النوع:** ${meta.label}\n**الحالة:** مفتوحة`, meta.color)], components: [{ type: 1, components: [{ type: 2, style: 2, custom_id: 'ticketctl:claim', label: 'استلام التذكرة', emoji: { name: '🙋' } }, { type: 2, style: 4, custom_id: 'ticketctl:close', label: 'إغلاق التذكرة', emoji: { name: '🔒' } }] }] });
   await logTicket('📥 فتح تذكرة', `العضو: <@${i.member.user.id}>\nالنوع: **${meta.label}**\nالروم: <#${channel.id}>`, meta.color);
   return reply(i, { embeds: [makeEmbed('تم فتح التذكرة', `تفضل: <#${channel.id}>`, COLORS.ok)] });
 }
@@ -308,6 +290,20 @@ async function onMessage(m) {
   if (m.channel_id === config.suggestionsChannelId) {
     await api('DELETE', `/channels/${m.channel_id}/messages/${m.id}`);
     await post(m.channel_id, { embeds: [makeEmbed('💡 اقتراح جديد', `**صاحب الاقتراح**\n<@${m.author.id}>\n\n━━━━━━━━━━━━━━\n**الاقتراح:**\n${m.content}\n━━━━━━━━━━━━━━\n\nصوت برأيك باستخدام الأزرار.`, COLORS.warn)], components: [{ type: 1, components: [{ type: 2, style: 3, custom_id: 'suggest:yes', label: 'أوافق', emoji: { name: '✅' } }, { type: 2, style: 4, custom_id: 'suggest:no', label: 'لا أوافق', emoji: { name: '❌' } }, { type: 2, style: 2, custom_id: 'suggest:neutral', label: 'محايد', emoji: { name: '🤔' } }] }] });
+  const entry = Object.entries(state.tickets).find(([, channelId]) => channelId === i.channel_id);
+  if (entry) { delete state.tickets[entry[0]]; save(); }
+  await logTicket('🔒 إغلاق تذكرة', `الروم: <#${i.channel_id}>\nبواسطة: <@${i.member.user.id}>\nالسبب: ${reason}`, COLORS.danger);
+  await reply(i, { embeds: [makeEmbed('🔒 إغلاق التذكرة', `سيتم حذف الروم خلال **5 ثواني**.\nالسبب: ${reason}`, COLORS.danger)] }, false);
+  setTimeout(() => api('DELETE', `/channels/${i.channel_id}`).catch(console.error), 5000);
+}
+
+async function onMessage(m) {
+  if (m.author.bot) return;
+  if (m.channel_id === config.suggestionsChannelId) {
+    await api('DELETE', `/channels/${m.channel_id}/messages/${m.id}`);
+    const msg = await post(m.channel_id, { embeds: [makeEmbed('💡 اقتراح جديد', `${fancyLine()}\n${m.content}\n\n**صاحب الاقتراح:** <@${m.author.id}>`, COLORS.warn)] });
+    await api('PUT', `/channels/${m.channel_id}/messages/${msg.id}/reactions/✅/@me`);
+    await api('PUT', `/channels/${m.channel_id}/messages/${msg.id}/reactions/❌/@me`);
   }
   if (m.channel_id === config.taxChannelId && /^\d+$/.test(m.content.trim())) {
     const amount = Number(m.content.trim());
