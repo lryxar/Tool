@@ -1,0 +1,4 @@
+{
+  "roles": ["User", "Support", "Moderator", "Admin", "Manager", "Developer", "Owner", "Main Owner"],
+  "prefixes": { "slash": "/", "admin": "!", "ticket": "*", "developer": "$" }
+}

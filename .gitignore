@@ -1,0 +1,7 @@
+node_modules/
+.env
+src/storage/*.sqlite
+src/storage/*.sqlite-*
+src/temp/*
+!src/temp/README.md
+npm-debug.log*

@@ -1,9 +1,19 @@
 {
   "name": "velora-hub-bot",
   "version": "1.0.0",
-  "description": "VELORA HUB Discord server management and ticket bot.",
-  "main": "index.js",
-  "scripts": { "start": "node index.js" },
+  "description": "VELORA HUB production-ready modular Discord bot for Node.js 24 LTS on Termux.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "register": "node src/handlers/registerCommands.js",
+    "check": "node scripts/check-project.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.22.1"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "author": "VELORA HUB",
   "license": "MIT"
 }
