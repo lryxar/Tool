@@ -1,9 +1,20 @@
 {
   "name": "velora-hub-bot",
   "version": "1.0.0",
-  "description": "VELORA HUB Discord server management and ticket bot.",
-  "main": "index.js",
-  "scripts": { "start": "node index.js" },
+  "description": "VELORA HUB modular Discord bot built with discord.js v14 and SQLite.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "register": "node src/handlers/registerCommands.js",
+    "check": "node --check src/index.js && node --check src/app.js && node --check src/handlers/client.js && node --check src/handlers/commandHandler.js && node --check src/database/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "sqlite3": "^5.1.7"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  },
   "author": "VELORA HUB",
   "license": "MIT"
 }

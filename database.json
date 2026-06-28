@@ -1,0 +1,1 @@
+{ "driver": "sqlite", "file": "src/storage/velora.sqlite", "futureDrivers": ["postgresql", "mongodb"] }
