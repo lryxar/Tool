@@ -1,19 +1,18 @@
 {
   "name": "velora-hub-bot",
   "version": "1.0.0",
-  "description": "VELORA HUB modular Discord bot built with discord.js v14 and SQLite.",
+  "description": "VELORA HUB production-ready modular Discord bot for Node.js 24 LTS on Termux.",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "register": "node src/handlers/registerCommands.js",
-    "check": "node --check src/index.js && node --check src/app.js && node --check src/handlers/client.js && node --check src/handlers/commandHandler.js && node --check src/database/index.js"
+    "check": "node scripts/check-project.js"
   },
   "dependencies": {
-    "discord.js": "^14.16.3",
-    "sqlite3": "^5.1.7"
+    "discord.js": "^14.22.1"
   },
   "engines": {
-    "node": ">=20.11.0"
+    "node": ">=24.0.0"
   },
   "author": "VELORA HUB",
   "license": "MIT"
